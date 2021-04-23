@@ -72,16 +72,16 @@ jobs:
         path: scorecard
     - name: Benchmark scorecard PR notification
       uses: actions/github-script@v3
-        if: github.event_name == 'pull_request'
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const { issue: { number: issue_number }, repo: { owner, repo }  } = context;
-            const run = await github.actions.getWorkflowRun({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  run_id: context.runId
-                });
-            const loc = run.data.html_url ? '[GitHub Action](' + run.data.html_url + ')' : 'GitHub Action';
-            const body = '👋 ' + '@' + context.actor + ' OWASP Benchmark scorecard is available for download in the Artifacts Section of ' + loc;
-            github.issues.createComment({ issue_number, owner, repo, body });
+      if: github.event_name == 'pull_request'
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const { issue: { number: issue_number }, repo: { owner, repo }  } = context;
+          const run = await github.actions.getWorkflowRun({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                run_id: context.runId
+              });
+          const loc = run.data.html_url ? '[GitHub Action](' + run.data.html_url + ')' : 'GitHub Action';
+          const body = '👋 ' + '@' + context.actor + ' OWASP Benchmark scorecard is available for download in the Artifacts Section of ' + loc;
+          github.issues.createComment({ issue_number, owner, repo, body });
